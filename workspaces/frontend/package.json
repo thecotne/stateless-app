@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@fullmarks/frontend",
+  "name": "@stateless-app/frontend",
   "version": "0.0.0-not-versioned",
   "license": "UNLICENSED",
   "dependencies": {

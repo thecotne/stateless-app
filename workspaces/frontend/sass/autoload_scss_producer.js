@@ -1,4 +1,4 @@
-const { productHeader, linesToString, nl } = require('@fullmarks/producers/helpers')
+const { productHeader, linesToString, nl } = require('@stateless-app/producers/helpers')
 
 function produce (files) {
   const styles = (
@@ -10,7 +10,7 @@ function produce (files) {
     path: `${__dirname}/_autoload.scss`,
     content: linesToString([
       productHeader(false),
-      nl(styles.map(p => `@import '~@fullmarks/frontend/${p}';`))
+      nl(styles.map(p => `@import '~@stateless-app/frontend/${p}';`))
     ])
   }]
 }

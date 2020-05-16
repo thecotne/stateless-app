@@ -1,9 +1,9 @@
 // @flow strict-local
-export type Defered<T> = {|
-  +promise: Promise<T>,
-  +reject: (Error | void) => void,
-  +resolve: T => void
-|}
+export type Defered<T> = {
+  promise: Promise<T>,
+  reject: (Error | undefined) => undefined,
+  resolve: T => undefined
+}
 
 export function defered<T> (): Defered<T> {
   let resolveHandler, rejectHandler

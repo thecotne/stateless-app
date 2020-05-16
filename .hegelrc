@@ -1,9 +1,13 @@
+# environment: nodejs
+environment: browser
 include:
   - ./**/*.js
 exclude:
   - ./.history/**
   - ./node_modules/**
-  - ./workspaces/*/node_modules/**
+  # - ./workspaces/frontend/**
+  - ./workspaces/blessing/**
+  - ./workspaces/producers/**
   - ./flow-typed/**
   - ./.yarn/**
 types:
