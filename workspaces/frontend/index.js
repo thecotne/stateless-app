@@ -3,9 +3,9 @@ import Index from './views/Index'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-if (document.body) {
+if (document.body != null) {
   ReactDOM.render(
-    <Index />,
+    React.createElement(Index),
     document.body.appendChild(document.createElement('main'))
   )
 } else {
