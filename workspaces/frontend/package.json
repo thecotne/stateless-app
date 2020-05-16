@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "@fullmarks/frontend",
+  "version": "0.0.0-not-versioned",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "classnames": "^2.2.6",
+    "clipboard-copy": "^3.1.0",
+    "date-fns": "^2.13.0",
+    "decoders": "^1.19.1",
+    "effector": "^20.15.0",
+    "effector-react": "^20.7.1",
+    "libreact": "^2.13.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "screenfull": "^5.0.2",
+    "video.js": "^7.7.6"
+  }
+}

@@ -1,0 +1,63 @@
+[declarations]
+.*\/node_modules\/.*
+
+[ignore]
+.*\/\.history\/.*
+
+[include]
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+; don't check all files
+; all=true
+
+; https://github.com/facebook/flow/issues/5180#issuecomment-366657780
+module.system.node.resolve_dirname=node_modules
+module.system.node.resolve_dirname=./workspaces
+
+; module.use_strict=true
+; experimental.const_params=true
+
+module.file_ext=.js
+module.file_ext=.css
+module.file_ext=.scss
+module.file_ext=.mp3
+module.name_mapper.extension='css' -> 'empty/object'
+module.name_mapper.extension='scss' -> 'empty/object'
+module.name_mapper.extension='mp3' -> '<PROJECT_ROOT>/flow-stub/fileFlowStub.js'
+; module.name_mapper='^\~\(.*\)$' -> '<PROJECT_ROOT>/workspaces/frontend/\1'
+; lazy_mode=fs
+
+esproposal.optional_chaining=enable
+esproposal.export_star_as=enable
+
+; max_literal_length=200
+[strict]
+sketchy-null
+sketchy-null-bool
+sketchy-null-string
+sketchy-null-number
+sketchy-null-mixed
+sketchy-number
+sketchy-number-and
+untyped-type-import
+nonstrict-import
+untyped-import
+unclear-type
+deprecated-type
+deprecated-utility
+; dynamic-export
+unsafe-getters-setters
+unnecessary-optional-chain
+unnecessary-invariant
+signature-verification-failure
+implicit-inexact-object
+uninitialized-instance-property
+ambiguous-object-type
+
+[version]
+0.125.1
