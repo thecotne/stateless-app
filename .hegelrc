@@ -3,7 +3,7 @@ include:
 exclude:
   - ./.history/**
   - ./node_modules/**
-  - ./node_modules/workspaces/*/node_modules/**
+  - ./workspaces/*/node_modules/**
   - ./flow-typed/**
   - ./.yarn/**
 types:
