@@ -1,6 +1,4 @@
 @import '_variables';
-@import '~bootstrap/scss/bootstrap';
-
-@import './fonts';
-@import './global';
-@import './autoload';
+@import '_fonts';
+@import '_global';
+@import '_autoload';
