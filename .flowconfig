@@ -7,43 +7,42 @@
 [include]
 
 [libs]
-flow-typed
-
-[lints]
+flow-typed/
 
 [options]
 ; don't check all files
 ; all=true
 
+module.use_strict=true
+
 ; https://github.com/facebook/flow/issues/5180#issuecomment-366657780
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./workspaces
 
-; module.use_strict=true
-; experimental.const_params=true
-
 module.file_ext=.js
 module.file_ext=.css
 module.file_ext=.scss
-module.file_ext=.mp3
 module.name_mapper.extension='css' -> 'empty/object'
 module.name_mapper.extension='scss' -> 'empty/object'
-module.name_mapper.extension='mp3' -> '<PROJECT_ROOT>/flow-stub/fileFlowStub.js'
-; module.name_mapper='^\~\(.*\)$' -> '<PROJECT_ROOT>/workspaces/frontend/\1'
-; lazy_mode=fs
 
-esproposal.optional_chaining=enable
+esproposal.class_instance_fields=enable
+esproposal.class_static_fields=enable
+esproposal.decorators=warn
 esproposal.export_star_as=enable
+esproposal.optional_chaining=enable
+esproposal.nullish_coalescing=enable
+exact_by_default=true
+experimental.const_params=true
+types_first=true
 
-; max_literal_length=200
 [strict]
 sketchy-null
-sketchy-null-bool
-sketchy-null-string
-sketchy-null-number
-sketchy-null-mixed
+; sketchy-null-bool
+; sketchy-null-string
+; sketchy-null-number
+; sketchy-null-mixed
 sketchy-number
-sketchy-number-and
+; sketchy-number-and
 untyped-type-import
 nonstrict-import
 untyped-import

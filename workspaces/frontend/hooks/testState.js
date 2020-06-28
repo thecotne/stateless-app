@@ -1,5 +1,5 @@
 // @flow strict-local
-import { createApi, createStore, useStore } from '@stateless-app/frontend/helpers/effector'
+import * as effector from '@stateless-app/frontend/helpers/effector'
 
 type State = {|
   +fullscreen: boolean,
@@ -7,27 +7,26 @@ type State = {|
   +fullscreenUIOnHold: boolean,
 |}
 
-const store = createStore<State>({
+const store = effector.createStore<State>({
   fullscreen: false,
   fullscreenUIHidden: false,
   fullscreenUIOnHold: false
 })
 
-export const actions = createApi(store, {
-  FULLSCREEN: (state, payload: boolean) => {
-    return {
-      ...state,
-      fullscreen: payload
-    }
-  },
-  FULLSCREEN_UI_HIDDEN: (state, payload: boolean) => ({
-    ...state,
-    fullscreenUIHidden: payload
-  }),
-  FULLSCREEN_UI_ON_HOLD: (state, payload: boolean) => ({
-    ...state,
-    fullscreenUIOnHold: payload
-  })
-})
+export const FULLSCREEN: effector.Event<boolean> = effector.createReducer(store, (state, payload: boolean) => ({
+  ...state,
+  fullscreen: payload
+}))
 
-export const useState = () => useStore(store)
+export const FULLSCREEN_UI_HIDDEN: effector.Event<boolean> = effector.createReducer(store, (state, payload: boolean) => ({
+  ...state,
+  fullscreenUIHidden: payload
+}))
+export const FULLSCREEN_UI_ON_HOLD: effector.Event<boolean> = effector.createReducer(store, (state, payload: boolean) => ({
+  ...state,
+  fullscreenUIOnHold: payload
+}))
+
+export function useState (): State {
+  return effector.useStore(store)
+}

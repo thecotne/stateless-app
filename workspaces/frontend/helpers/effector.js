@@ -1,12 +1,19 @@
-/* eslint-disable import/export */
 // @flow strict-local
-import { type Event, type Store } from 'effector'
+import * as effector from 'effector'
 
 export * from 'effector'
 export * from 'effector-react'
 
-// flowlint-next-line unclear-type:off
-declare export function createApi<S, Api: any> (
-  store: Store<S>,
-  api: Api
-): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
+export function createReducer<S, E> (store: effector.Store<S>, fn: (S, E) => S): effector.Event<E> {
+  const action = effector.createEvent<E>()
+
+  store.on(action, fn)
+
+  return action
+}
+
+export function createAsyncAction<Params, Done, Fail> (handler: Params => Promise<Done> | Done): effector.Effect<Params, Done, Fail> {
+  return effector.createEffect<Params, Done, Fail>({
+    handler
+  })
+}
