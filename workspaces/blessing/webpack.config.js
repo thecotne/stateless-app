@@ -189,14 +189,16 @@ module.exports = (env = {}, argv = {}) => {
             MiniCssExtractPlugin.loader,
             'css-loader',
             {
-              loader: 'postcss-loader',
+              loader: require.resolve('postcss-loader'),
               options: {
                 sourceMap: true,
-                plugins: [
-                  autoprefixer({
-                    overrideBrowserslist: ['> 0%']
-                  })
-                ]
+                postcssOptions: {
+                  plugins: [
+                    autoprefixer({
+                      overrideBrowserslist: ['> 0%']
+                    })
+                  ]
+                }
               }
             },
             'resolve-url-loader?sourceMap',

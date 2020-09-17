@@ -15,7 +15,7 @@ it is HIGHLY RECOMMENDED to install nodejs (and npm) with [nvm](https://github.c
 required versions of sayed software are listed below
 
 ```yaml
-node: ^14.4.0
-npm: ^6.14.5
-yarn: ^1.22.4
+node: ^14.11.0
+npm: ^6.14.8
+yarn: ^1.22.5
 ```
