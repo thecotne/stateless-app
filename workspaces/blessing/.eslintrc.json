@@ -6,7 +6,7 @@
       //"createClass": "createReactClass",
       //"pragma": "React",
       "version": "16.13",
-      "flowVersion": "0.133.0"
+      "flowVersion": "0.134.0"
     }
   },
   "parserOptions": {
