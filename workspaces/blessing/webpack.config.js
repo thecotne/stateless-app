@@ -1,4 +1,3 @@
-// @flow
 const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -11,6 +10,7 @@ const autoprefixer = require('autoprefixer')
 const babelrc = require('./babelrc.js')
 const UnusedFilesWebpackPlugin = require('./webpack-plugins/unused-files')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
+const statelessrc = require('../../statelessrc')
 
 const abs = str => path.resolve(__dirname, str)
 const rootAbs = str => path.resolve(abs('../..'), str)
@@ -26,7 +26,7 @@ function getWorkers (env, argv) {
   }
 }
 
-module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whatever */ => {
+module.exports = (env = {}, argv = {}) => {
   const production = argv.mode === 'production'
   const workers = getWorkers()
 
@@ -46,7 +46,8 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
             output: {
               comments: false
             }
-          }
+          },
+          extractComments: false
         }),
         new OptimizeCSSAssetsPlugin({
           cssProcessorOptions: {
@@ -72,6 +73,8 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
       chunkFilename: 'cache/js/[name]-[chunkhash].chunk.js',
       publicPath: '/'
     },
+    externalsType: 'script',
+    externals: statelessrc.externals ?? {},
     resolve: {
       modules: [
         rootAbs('node_modules'),
@@ -80,7 +83,7 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
         frontendAbs('sass'),
         frontendAbs('.')
       ],
-      extensions: ['.js', '.json', '.scss']
+      extensions: ['.ts', '.tsx', '.js', '.json', '.scss']
     },
     node: false,
     module: {
@@ -98,11 +101,11 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
         },
         {
           test: path => {
-            if (!/\.js$/.test(path)) {
+            if (!/\.(js|ts|tsx)$/.test(path)) {
               return false
             }
 
-            if (!production && /node_modules/.test(path)) {
+            if (/node_modules/.test(path)) {
               return false
             }
 
@@ -177,7 +180,9 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
         filter (path) {
           if (/[/]node_modules[/]/.test(path)) return false
           if (/[/][.]DS_Store$/.test(path)) return false
-          if (/[/]\w+_producer[.]js$/.test(path)) return false
+          if (/[/]\w+[.]d[.]ts$/.test(path)) return false
+          if (/[/]\w+_producer[.]ts$/.test(path)) return false
+          if (path === frontendAbs('tsconfig.json')) return false
           if (path === frontendAbs('package.json')) return false
 
           return true
@@ -192,9 +197,10 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
     devServer: {
       before (app) {
         for (const host of config.devServer.allowedHosts) {
+          const protocol = 'http'
           const port = config.devServer.port
 
-          console.info(`Project is running at http://${host}:${port}/`)
+          console.info(`Project is running at ${protocol}://${host}:${port}/`)
         }
       },
       contentBase: abs('public'),
@@ -202,12 +208,13 @@ module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whate
         disableDotRule: true
       },
       host: '0.0.0.0',
-      allowedHosts: [
+      allowedHosts: statelessrc.hosts ?? [
+        'localhost',
         'stateless-app.test'
       ],
       https: false,
       disableHostCheck: false,
-      port: 8132
+      port: statelessrc.port ?? 8080
     },
     devtool: false,
     performance: {

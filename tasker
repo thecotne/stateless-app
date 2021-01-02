@@ -7,7 +7,7 @@ fi
 
 source ./node_modules/@thecotne/tasker/tasker-core
 
-function info { # Show some informations about environment
+function info { # Show some information about environment
   echo "yarn v$(yarn -v)"
   echo "node $(node -v)"
 }
@@ -25,16 +25,15 @@ function producers { # Execute Producers
 }
 
 function start { # Start Server
-  (producers --watch) & (eval "blessing start ${@}")
+  concurrently \
+    --names "PRODUCER,BLESSING"\
+    --prefix-colors "cyan,magenta"\
+      "tasker producers --watch"\
+      "tasker blessing start ${@}"
 }
 
 function build { # Build App
   eval "blessing build ${@}"
-}
-
-function build-everything { # Build Everything
-  eval "blessing build ${@}"
-  eval "blessing flow-coverage-html ${@}"
 }
 
 function test { # Run Tests

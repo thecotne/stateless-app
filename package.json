@@ -10,7 +10,5 @@
   "workspaces": [
     "workspaces/*"
   ],
-  "dependencies": {
-    "flow-bin": "^0.136.0"
-  }
+  "dependencies": {}
 }

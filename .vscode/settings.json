@@ -2,47 +2,8 @@
   "files.exclude": {
     ".history": true
   },
-  "eslint.options": {
-    "configFile": "workspaces/blessing/.eslintrc.json"
-  },
-  "eslint.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "emmet.includeLanguages": {
-    "javascript": "javascriptreact"
-  },
-  "cSpell.enabledLanguageIds": [
-    "asciidoc",
-    "c",
-    "cpp",
-    "csharp",
-    "css",
-    "git-commit",
-    "go",
-    "handlebars",
-    "haskell",
-    "html",
-    "jade",
-    "java",
-    "javascriptreact",
-    "json",
-    "jsonc",
-    "latex",
-    "less",
-    "markdown",
-    "php",
-    "plaintext",
-    "pug",
-    "python",
-    "restructuredtext",
-    "rust",
-    "scala",
-    "scss",
-    "text",
-    "typescript",
-    "typescriptreact",
-    "yaml",
-    "yml"
-  ]
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

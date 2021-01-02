@@ -1,4 +1,3 @@
-// @flow
 const path = require('path')
 const fs = require('fs')
 const yaml = require('js-yaml')
@@ -15,7 +14,7 @@ const yamlLoad = (path, optional) => {
   }
 }
 
-module.exports = ({ NODE_ENV }/*: { NODE_ENV: string } */)/*: $whatever */ => {
+module.exports = ({ NODE_ENV }) => {
   const gitRevisionPlugin = new GitRevisionPlugin()
 
   const env = {

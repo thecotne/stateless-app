@@ -1,10 +1,8 @@
 /.env.yml
-/.idea
-/flow-coverage
-/public
-/storybook-static
-/yarn-error.log
-/npm-debug.log
-/node_modules
-/workspaces/*/node_modules
 /.history
+/.idea
+/public
+node_modules
+npm-debug.log
+tsconfig.tsbuildinfo
+yarn-error.log

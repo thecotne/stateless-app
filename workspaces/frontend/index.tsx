@@ -1,9 +1,8 @@
-// @flow strict-local
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import Index from './views/Index'
-import React from 'react'
-import ReactDOM from 'react-dom'
 
-if (document.body) {
+if (document.body != null) {
   ReactDOM.render(
     <Index />,
     document.body.appendChild(document.createElement('main'))

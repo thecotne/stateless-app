@@ -1,5 +1,4 @@
-// @flow strict-local
-export * from './defered'
+export * from './fns'
 
 export * as date from 'date-fns'
 

@@ -1,15 +1,7 @@
-// @flow
 const path = require('path')
 const fs = require('fs').promises
 
-/*::
-type Opts = {
-  failOnUnused?: boolean,
-  filter?: string => boolean,
-}
-*/
-
-async function applyAfterEmit (compiler, compilation, opts/*: Opts */) {
+async function applyAfterEmit (compiler, compilation, opts) {
   try {
     const unusedUnfiltered = (await walk(compiler.context))
       .map(file => path.join(compiler.context, file))
@@ -33,7 +25,7 @@ async function applyAfterEmit (compiler, compilation, opts/*: Opts */) {
   }
 }
 
-module.exports = function (opts/*: Opts */)/*: $whatever */ {
+module.exports = function (opts) {
   return {
     apply (compiler) {
       compiler.hooks.afterEmit.tapAsync(
@@ -48,7 +40,7 @@ async function walk (dirPath, base) {
   return array(scandir(dirPath, base))
 }
 
-async function * scandir (dirPath/*: string */, base/*: ?string */) {
+async function * scandir (dirPath, base) {
   const basePath = base || dirPath
 
   for (const file of await fs.readdir(dirPath)) {

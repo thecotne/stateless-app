@@ -10,12 +10,12 @@
 
 You will need to install nodejs, npm and yarn
 
-it is HIGHLY RECOMMENDED to install nodejs (and npm) with [nvm](https://github.com/creationix/nvm) and then yarn with npm
+it is HIGHLY RECOMMENDED to install nodejs (and npm) with [nvm](https://github.com/creationix/nvm) and then yarn with npm (if needed you can update npm with npm by `npm i -g npm@latest`)
 
 required versions of sayed software are listed below
 
 ```yaml
-node: ^14.12.0
+node: ^14.15.0
 npm: ^6.14.8
 yarn: ^1.22.5
 ```

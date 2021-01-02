@@ -5,20 +5,19 @@ SELF_PATH=$(cd -P -- "$(dirname -- "$0")" && pwd -P) && SELF_PATH=$SELF_PATH/$(b
 SELF_DIR=$(dirname $SELF_PATH)
 ROOT_DIR="$SELF_DIR/../.."
 WORKSPACES_DIR="$ROOT_DIR/workspaces"
-WORKSPACE_DIR="$ROOT_DIR/workspaces/frontend"
+WORKSPACE_FRONTEND="$ROOT_DIR/workspaces/frontend"
+WORKSPACE_PRODUCERS="$ROOT_DIR/workspaces/producers"
 
-ESLINT_CONFIG="$SELF_DIR/.eslintrc.json"
-ESLINT_IGNORE_CONFIG="$SELF_DIR/.eslintignore"
-ESLINT_FILES="$ROOT_DIR/flow-typed $WORKSPACES_DIR"
+ESLINT_CONFIG="$ROOT_DIR/.eslintrc.js"
+ESLINT_IGNORE_CONFIG="$ROOT_DIR/.eslintignore"
+ESLINT_FILES="$WORKSPACES_DIR"
 ESLINT_COMMAND="eslint --ignore-path $ESLINT_IGNORE_CONFIG --config $ESLINT_CONFIG $ESLINT_FILES"
 
-PRETTIER_CONFIG="$SELF_DIR/.prettierrc.js"
-PRETTIER_CSS_FILES="$WORKSPACE_DIR/sass/*/*/*.scss $WORKSPACE_DIR/sass/*/*.scss $WORKSPACE_DIR/sass/*.scss"
-PRETTIER_CSS_COMMAND="prettier --config $PRETTIER_CONFIG $PRETTIER_CSS_FILES --parser=css"
+PRETTIER_CONFIG="$ROOT_DIR/.prettierrc.js"
+PRETTIER_CSS_FILES=($WORKSPACE_FRONTEND'/sass/**/*.scss')
+PRETTIER_CSS_COMMAND="prettier --config $PRETTIER_CONFIG '$PRETTIER_CSS_FILES' --parser=css"
 
 WEBPACK_CONFIG="$SELF_DIR/webpack.config.js"
-
-FLOW_COVERAGE_FILES="workspaces/frontend/**/*.js"
 
 if [ ! -f $ROOT_DIR/node_modules/@thecotne/tasker/tasker-core ]; then
   yarn --frozen-lockfile
@@ -55,24 +54,14 @@ function watch { # Compile Assets And Watch For Changes
 }
 
 function clean { # Remove built files
-  rm -vrf $(_path_normalize $WORKSPACE_DIR/public)
+  rm -vrf $(_path_normalize $WORKSPACE_FRONTEND/public)
   rm -vrf $(_path_normalize $ROOT_DIR/public)
-  rm -vrf $(_path_normalize $ROOT_DIR/flow-coverage)
 }
 
 function test { # Run Tests
   prettier-css-lint
-  grep-tests
   lint
-  flow-check
-}
-
-function grep-tests { # custom linting using grep
-  TEST_DIR=$(_path_relative $ROOT_DIR $WORKSPACE_DIR)
-
-  _grep -HRin "facebook\.com" $TEST_DIR || true
-  _grep -HRin "google\.\(com\|ge\)" $TEST_DIR || true
-  _grep -HRin "girchi\.\(com\|ge\)" $TEST_DIR || true
+  ts-check
 }
 
 function prettier-css { # Prettier CSS
@@ -87,24 +76,18 @@ function lint { # Lint Project Files
   eval "$ESLINT_COMMAND ${@}"
 }
 
-function flow-check { # Flow Check
-  cd $ROOT_DIR
-
-  flow check
+function ts-check { # Type Check Code With Typescript
+  ts-check-frontend
+  ts-check-producers
 }
 
-function flow-coverage { # Flow Coverage Report text
-  cd $ROOT_DIR
-
-  flow-coverage-report -i "$FLOW_COVERAGE_FILES"
+function ts-check-frontend { # Type Check 'frontend' Code With Typescript
+  tsc -p "$WORKSPACE_FRONTEND/tsconfig.json"
 }
 
-function flow-coverage-html { # Flow Coverage Report html
-  cd $ROOT_DIR
-
-  flow-coverage-report -i "$FLOW_COVERAGE_FILES" -t html
+function ts-check-producers { # Type Check 'producers' Code With Typescript
+  tsc -p "$WORKSPACE_PRODUCERS/tsconfig.json"
 }
-
 
 function _path_normalize {
   node -e "
