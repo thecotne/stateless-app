@@ -1,17 +1,16 @@
 // flow-typed signature: a00cf41b09af4862583460529d5cfcb9
 // flow-typed version: c6154227d1/classnames_v2.x.x/flow_>=v0.104.x
 // @flow
-
 type $npm$classnames$Classes =
   | string
-  | { [className: string]: *, ... }
+  | { [className: string]: mixed, ... }
   | false
   | void
-  | null;
+  | null
 
 declare module 'classnames' {
   declare module.exports: (
-    ...classes: Array<$npm$classnames$Classes | $npm$classnames$Classes[]>
+    ...classes: $ReadOnlyArray<$npm$classnames$Classes | $ReadOnlyArray<$npm$classnames$Classes>>
   ) => string;
 }
 

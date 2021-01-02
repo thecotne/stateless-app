@@ -1,7 +1,7 @@
+/* eslint-disable flowtype/no-weak-types */
 // flow-typed signature: a333d1cdbb5a4103d0be63a412070e22
 // flow-typed version: b2693c1879/react-dom_v16.x.x/flow_>=v0.117.x
 // @flow
-
 declare module 'react-dom' {
   declare function findDOMNode(
     componentOrElement: Element | ?React$Component<any, any>,
@@ -55,7 +55,7 @@ declare module 'react-dom/server' {
   declare var version: string;
 }
 
-type Thenable = { then(resolve: () => mixed, reject?: () => mixed): mixed, ... };
+type Thenable = { then(resolve: () => mixed, reject?: () => mixed): mixed, ... }
 
 declare module 'react-dom/test-utils' {
   declare var Simulate: { [eventName: string]: (element: Element, eventData?: Object) => void, ... };
@@ -82,11 +82,11 @@ declare module 'react-dom/test-utils' {
   declare function findAllInRenderedTree(
     tree: React$Component<any, any>,
     test: (child: React$Component<any, any>) => boolean,
-  ): Array<React$Component<any, any>>;
+  ): $ReadOnlyArray<React$Component<any, any>>;
   declare function scryRenderedDOMComponentsWithClass(
     tree: React$Component<any, any>,
     className: string,
-  ): Array<Element>;
+  ): $ReadOnlyArray<Element>;
   declare function findRenderedDOMComponentWithClass(
     tree: React$Component<any, any>,
     className: string,
@@ -94,7 +94,7 @@ declare module 'react-dom/test-utils' {
   declare function scryRenderedDOMComponentsWithTag(
     tree: React$Component<any, any>,
     tagName: string,
-  ): Array<Element>;
+  ): $ReadOnlyArray<Element>;
   declare function findRenderedDOMComponentWithTag(
     tree: React$Component<any, any>,
     tagName: string,
@@ -102,7 +102,7 @@ declare module 'react-dom/test-utils' {
   declare function scryRenderedComponentsWithType(
     tree: React$Component<any, any>,
     componentClass: React$ElementType,
-  ): Array<React$Component<any, any>>;
+  ): $ReadOnlyArray<React$Component<any, any>>;
   declare function findRenderedComponentWithType(
     tree: React$Component<any, any>,
     componentClass: React$ElementType,

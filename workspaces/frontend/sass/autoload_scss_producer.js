@@ -1,18 +1,31 @@
-const { productHeader, linesToString, nl } = require('@stateless-app/producers/helpers')
+// @flow strict-local
+type ProducedFile = {
+  +content: string,
+  +path: string,
+}
 
-function produce (files) {
-  const styles = (
-    files
-      .filter(path => /^views[/]([^/]+[/])*[\w-]+[.]scss$/.test(path))
-  )
+function produce (files: $ReadOnlyArray<string>): $ReadOnlyArray<ProducedFile> {
+  return array(function * () {
+    yield file(`${__dirname}/_autoload.scss`, function * () {
+      yield '// Auto Generated, Don\'t Modify Manually'
+      for (const path of files) {
+        if (/^views[/]([^/]+[/])*[\w-]+[.]scss$/.test(path)) {
+          yield `@import '~@stateless-app/frontend/${path}';`
+        }
+      }
+    })
+  })
+}
 
-  return [{
-    path: `${__dirname}/_autoload.scss`,
-    content: linesToString([
-      productHeader(false),
-      nl(styles.map(p => `@import '~@stateless-app/frontend/${p}';`))
-    ])
-  }]
+function array<T> (iterable: () => Iterable<T>): $ReadOnlyArray<T> {
+  return Array.from(iterable())
+}
+
+function file (path: string, iterable: () => Iterable<string>): ProducedFile {
+  return {
+    path,
+    content: array(iterable).join('\n')
+  }
 }
 
 module.exports = produce

@@ -6,11 +6,11 @@ export function useDidMount (fn: () => void | (() => void)) {
   React.useEffect(fn, [])
 }
 
-type ResetableFormFieldProps<Value> = {|
+type ResetableFormFieldProps<Value> = {
   +value: Value,
   +update: Value => mixed,
-  +reset: void => mixed
-|}
+  +reset: void => mixed,
+}
 
 export function useField<T> (defaultValue: T): ResetableFormFieldProps<T> {
   const [value, update] = React.useState<T>(defaultValue)

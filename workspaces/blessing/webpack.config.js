@@ -1,25 +1,20 @@
+// @flow
 const webpack = require('webpack')
 const path = require('path')
-// const fs = require('fs')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { UnusedFilesWebpackPlugin } = require('unused-files-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const postcssSafeParser = require('postcss-safe-parser')
-// const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const os = require('os')
 const autoprefixer = require('autoprefixer')
-const babelrc = require('./.babelrc.js')
+const babelrc = require('./babelrc.js')
+const UnusedFilesWebpackPlugin = require('./webpack-plugins/unused-files')
+const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 const abs = str => path.resolve(__dirname, str)
 const rootAbs = str => path.resolve(abs('../..'), str)
-const groundAbs = str => path.resolve(rootAbs('workspaces/frontend'), str)
-// const oneOf = (...arr) => arr.find(path => fs.existsSync(path))
-// const die = (msg, code = 1) => {
-//   console.warn(msg)
-//   process.exit(code)
-// }
+const frontendAbs = str => path.resolve(rootAbs('workspaces/frontend'), str)
 
 function getWorkers (env, argv) {
   const cpus = os.cpus()
@@ -31,67 +26,22 @@ function getWorkers (env, argv) {
   }
 }
 
-// function getHttps (env, argv) {
-//   if (env.https) {
-//     const certs = {
-//       key: abs('certs/stateless-app.test.key'),
-//       cert: abs('certs/stateless-app.test.cert')
-//     }
-//
-//     if (fs.existsSync(certs.key) && fs.existsSync(certs.cert)) {
-//       return {
-//         key: fs.readFileSync(certs.key),
-//         cert: fs.readFileSync(certs.cert)
-//       }
-//     }
-//   }
-//
-//   return false
-// }
-
-module.exports = (env = {}, argv = {}) => {
+module.exports = (env/*: $whatever */ = {}, argv/*: $whatever */ = {})/*: $whatever */ => {
   const production = argv.mode === 'production'
-  const https = false
-  // const https = getHttps(env, argv)
   const workers = getWorkers()
-
-  env.cirDep = true
 
   const babelConfig = {
     babelrc: false,
     cacheDirectory: true,
-    root: groundAbs('.'),
+    root: frontendAbs('.'),
     ...babelrc
   }
 
   const config = {
     optimization: {
-      splitChunks: {
-        chunks: 'async',
-        minSize: 30000,
-        maxSize: 0,
-        minChunks: 1,
-        maxAsyncRequests: 5,
-        maxInitialRequests: 3,
-        automaticNameDelimiter: '~',
-        name: true,
-        cacheGroups: {
-          vendors: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10
-          },
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true
-          }
-        }
-      },
       minimizer: [
         new TerserPlugin({
-          cache: true,
           parallel: true,
-          sourceMap: false,
           terserOptions: {
             output: {
               comments: false
@@ -112,9 +62,8 @@ module.exports = (env = {}, argv = {}) => {
       index: [
         require.resolve('core-js/stable'),
         require.resolve('regenerator-runtime/runtime'),
-        groundAbs('.'),
-        groundAbs('sass')
-        // groundAbs('stories')
+        frontendAbs('.'),
+        frontendAbs('sass')
       ]
     },
     output: {
@@ -127,9 +76,9 @@ module.exports = (env = {}, argv = {}) => {
       modules: [
         rootAbs('node_modules'),
         abs('node_modules'),
-        groundAbs('node_modules'),
-        groundAbs('sass'),
-        groundAbs('.')
+        frontendAbs('node_modules'),
+        frontendAbs('sass'),
+        frontendAbs('.')
       ],
       extensions: ['.js', '.json', '.scss']
     },
@@ -153,7 +102,7 @@ module.exports = (env = {}, argv = {}) => {
               return false
             }
 
-            if (/node_modules/.test(path)) {
+            if (!production && /node_modules/.test(path)) {
               return false
             }
 
@@ -179,7 +128,7 @@ module.exports = (env = {}, argv = {}) => {
         {
           test: /\.(mp4|mp3|jpe?g|png|gif|swf|ttf|eot|svg|woff2?)(\?[a-z0-9]+)?$/,
           loader: 'file-loader',
-          query: {
+          options: {
             name: 'cache/assets/[name]-[hash].[ext]'
           }
         },
@@ -191,7 +140,6 @@ module.exports = (env = {}, argv = {}) => {
             {
               loader: require.resolve('postcss-loader'),
               options: {
-                sourceMap: true,
                 postcssOptions: {
                   plugins: [
                     autoprefixer({
@@ -201,9 +149,7 @@ module.exports = (env = {}, argv = {}) => {
                 }
               }
             },
-            'resolve-url-loader?sourceMap',
-            'sass-loader?sourceMap',
-            'import-glob-loader'
+            'sass-loader'
           ]
         }
       ]
@@ -222,36 +168,33 @@ module.exports = (env = {}, argv = {}) => {
         filename: 'cache/css/[name]-[chunkhash].css',
         chunkFilename: 'cache/css/[name]-[chunkhash].chunks.css'
       }),
-
-      // new ServiceWorkerWebpackPlugin({
-      //   entry: groundAbs('service-worker.js')
-      // }),
-
       new webpack.ProvidePlugin({
         'process.env': require.resolve('./env.js')
       }),
-
       new UnusedFilesWebpackPlugin({
         // failOnUnused: production,
         failOnUnused: false,
-        patterns: ['**/*.*'],
-        globOptions: {
-          ignore: [
-            '**/*_producer.js',
-            '**/types.js',
-            '**/package.json',
-            '**/types/*.js'
-          ]
+        filter (path) {
+          if (/[/]node_modules[/]/.test(path)) return false
+          if (/[/][.]DS_Store$/.test(path)) return false
+          if (/[/]\w+_producer[.]js$/.test(path)) return false
+          if (path === frontendAbs('package.json')) return false
+
+          return true
         }
+      }),
+      new CircularDependencyPlugin({
+        exclude: /[/]blessing[/]env[.]js$|[/]node_modules[/]/,
+        failOnError: false,
+        cwd: frontendAbs('.')
       })
     ],
     devServer: {
       before (app) {
         for (const host of config.devServer.allowedHosts) {
-          const protocol = https ? 'https' : 'http'
           const port = config.devServer.port
 
-          console.info(`Project is running at ${protocol}://${host}:${port}/`)
+          console.info(`Project is running at http://${host}:${port}/`)
         }
       },
       contentBase: abs('public'),
@@ -262,7 +205,7 @@ module.exports = (env = {}, argv = {}) => {
       allowedHosts: [
         'stateless-app.test'
       ],
-      https,
+      https: false,
       disableHostCheck: false,
       port: 8132
     },
@@ -270,7 +213,8 @@ module.exports = (env = {}, argv = {}) => {
     performance: {
       hints: false
     },
-    context: groundAbs('.')
+    context: frontendAbs('.'),
+    stats: 'minimal'
   }
 
   if (!production) {
@@ -280,19 +224,6 @@ module.exports = (env = {}, argv = {}) => {
       new WebpackBuildNotifierPlugin({
         sound: 'Tink',
         suppressSuccess: true
-      })
-    )
-  }
-
-  if (env.cirDep) {
-    const CircularDependencyPlugin = require('circular-dependency-plugin')
-
-    config.stats = 'minimal'
-    config.plugins.push(
-      new CircularDependencyPlugin({
-        exclude: /node_modules/,
-        failOnError: false,
-        cwd: groundAbs('.')
       })
     )
   }

@@ -1,3 +1,4 @@
+/* eslint-disable flowtype/no-weak-types */
 // @flow
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -27,70 +28,70 @@ declare type React$Node =
 declare class React$Component<Props, State = void> {
   // fields
 
-  props: Props;
-  state: State;
+  props: Props,
+  state: State,
 
   // action methods
 
   setState(
     partialState: ?$Shape<State> | ((State, Props) => ?$Shape<State>),
     callback?: () => mixed,
-  ): void;
+  ): void,
 
-  forceUpdate(callback?: () => void): void;
+  forceUpdate(callback?: () => void): void,
 
   // lifecycle methods
 
-  constructor(props?: Props, context?: any): void;
-  render(): React$Node;
-  componentWillMount(): mixed;
-  UNSAFE_componentWillMount(): mixed;
-  componentDidMount(): mixed;
+  constructor(props?: Props, context?: any): void,
+  render(): React$Node,
+  componentWillMount(): mixed,
+  UNSAFE_componentWillMount(): mixed,
+  componentDidMount(): mixed,
   componentWillReceiveProps(
     nextProps: Props,
     nextContext: any,
-  ): mixed;
+  ): mixed,
   UNSAFE_componentWillReceiveProps(
     nextProps: Props,
     nextContext: any,
-  ): mixed;
+  ): mixed,
   shouldComponentUpdate(
     nextProps: Props,
     nextState: State,
     nextContext: any,
-  ): boolean;
+  ): boolean,
   componentWillUpdate(
     nextProps: Props,
     nextState: State,
     nextContext: any,
-  ): mixed;
+  ): mixed,
   UNSAFE_componentWillUpdate(
     nextProps: Props,
     nextState: State,
     nextContext: any,
-  ): mixed;
+  ): mixed,
   componentDidUpdate(
     prevProps: Props,
     prevState: State,
     prevContext: any,
-  ): mixed;
-  componentWillUnmount(): mixed;
+  ): mixed,
+  componentWillUnmount(): mixed,
   componentDidCatch(
     error: Error,
     info: {
       componentStack: string,
     }
-  ): mixed;
+  ): mixed,
 
   // long tail of other stuff not modeled very well
 
-  refs: any;
-  context: any;
-  getChildContext(): any;
-  static displayName?: ?string;
-  static childContextTypes: any;
-  static contextTypes: any;
-  static propTypes: any;
+  refs: any,
+  context: any,
+  getChildContext(): any,
+  static displayName?: ?string,
+  static childContextTypes: any,
+  static contextTypes: any,
+  static propTypes: any,
 
   // We don't add a type for `defaultProps` so that its type may be entirely
   // inferred when we diff the type for `defaultProps` with `Props`. Otherwise
@@ -106,8 +107,8 @@ declare class React$PureComponent<Props, State = void>
   // already declared in the base class need to be redeclared below. Ideally
   // they should simply be inherited.
 
-  props: Props;
-  state: State;
+  props: Props,
+  state: State,
 }
 
 /**
@@ -118,16 +119,16 @@ declare class LegacyReactComponent<Props, State>
   extends React$Component<Props, State> {
   // additional methods
 
-  replaceState(state: State, callback?: () => void): void;
+  replaceState(state: State, callback?: () => void): void,
 
-  isMounted(): boolean;
+  isMounted(): boolean,
 
   // TODO: Due to bugs in Flow's handling of React.createClass, some fields
   // already declared in the base class need to be redeclared below. Ideally
   // they should simply be inherited.
 
-  props: Props;
-  state: State;
+  props: Props,
+  state: State,
 }
 
 declare type React$AbstractComponentStatics = {
@@ -146,7 +147,7 @@ declare type React$StatelessFunctionalComponent<Props> = {
   (props: Props, context: any): React$Node,
   displayName?: ?string,
   propTypes?: any,
-  contextTypes?: any
+  contextTypes?: any,
 };
 
 /**
@@ -175,12 +176,12 @@ declare type React$ElementType =
  * Type of a React element. React elements are commonly created using JSX
  * literals, which desugar to React.createElement calls (see below).
  */
-declare type React$Element<+ElementType: React$ElementType> = {|
+declare type React$Element<+ElementType: React$ElementType> = {
   +type: ElementType,
   +props: React$ElementProps<ElementType>,
   +key: React$Key | null,
   +ref: any,
-|};
+};
 
 /**
  * The type of the key that React uses to determine where items in a new list
@@ -238,56 +239,56 @@ declare module react {
     type: ElementType,
   ): React$ElementFactory<ElementType>;
   declare export function createRef<T>(
-  ): {|current: null | T|};
+  ): {current: null | T};
 
   declare export function isValidElement(element: any): boolean;
 
   declare export var Component: typeof React$Component;
   declare export var PureComponent: typeof React$PureComponent;
   declare export type StatelessFunctionalComponent<P> =
-    React$StatelessFunctionalComponent<P>;
-  declare export type ComponentType<-P> = React$ComponentType<P>;
+    React$StatelessFunctionalComponent<P>
+  declare export type ComponentType<-P> = React$ComponentType<P>
   declare export type AbstractComponent<
     -Config,
     +Instance = mixed,
-  > = React$AbstractComponent<Config, Instance>;
-  declare export type ElementType = React$ElementType;
-  declare export type Element<+C> = React$Element<C>;
+  > = React$AbstractComponent<Config, Instance>
+  declare export type ElementType = React$ElementType
+  declare export type Element<+C> = React$Element<C>
   declare export var Fragment: ({children: ?React$Node}) => React$Node;
-  declare export type Key = React$Key;
-  declare export type Ref<C> = React$Ref<C>;
-  declare export type Node = React$Node;
-  declare export type Context<T> = React$Context<T>;
-  declare export type Portal = React$Portal;
+  declare export type Key = React$Key
+  declare export type Ref<C> = React$Ref<C>
+  declare export type Node = React$Node
+  declare export type Context<T> = React$Context<T>
+  declare export type Portal = React$Portal
   declare export var ConcurrentMode: ({children: ?React$Node}) => React$Node; // 16.7+
   declare export var StrictMode: ({children: ?React$Node}) => React$Node;
 
   declare export var Suspense: React$ComponentType<{
     children?: ?React$Node,
     fallback?: React$Node,
-    maxDuration?: number
+    maxDuration?: number,
   }>; // 16.6+
 
-  declare export type ElementProps<C> = React$ElementProps<C>;
-  declare export type ElementConfig<C> = React$ElementConfig<C>;
-  declare export type ElementRef<C> = React$ElementRef<C>;
-  declare export type Config<Props, DefaultProps> = React$Config<Props, DefaultProps>;
+  declare export type ElementProps<C> = React$ElementProps<C>
+  declare export type ElementConfig<C> = React$ElementConfig<C>
+  declare export type ElementRef<C> = React$ElementRef<C>
+  declare export type Config<Props, DefaultProps> = React$Config<Props, DefaultProps>
 
-  declare export type ChildrenArray<+T> = $ReadOnlyArray<ChildrenArray<T>> | T;
+  declare export type ChildrenArray<+T> = $ReadOnlyArray<ChildrenArray<T>> | T
   declare export var Children: {
     map<T, U>(
       children: ChildrenArray<T>,
       fn: (child: $NonMaybeType<T>, index: number) => U,
       thisArg?: mixed,
-    ): Array<$NonMaybeType<U>>;
+    ): $ReadOnlyArray<$NonMaybeType<U>>,
     forEach<T>(
       children: ChildrenArray<T>,
       fn: (child: T, index: number) => mixed,
       thisArg?: mixed,
-    ): void;
-    count(children: ChildrenArray<any>): number;
-    only<T>(children: ChildrenArray<T>): $NonMaybeType<T>;
-    toArray<T>(children: ChildrenArray<T>): Array<$NonMaybeType<T>>;
+    ): void,
+    count(children: ChildrenArray<any>): number,
+    only<T>(children: ChildrenArray<T>): $NonMaybeType<T>,
+    toArray<T>(children: ChildrenArray<T>): $ReadOnlyArray<$NonMaybeType<T>>,
   };
 
   declare export function forwardRef<Config, Instance>(
@@ -340,7 +341,7 @@ declare module react {
     init: (I) => S,
   ): [S, Dispatch<A>];
 
-  declare export function useRef<T>(initialValue: T): {|current: T|};
+  declare export function useRef<T>(initialValue: T): {current: T};
 
   declare export function useDebugValue(value: any): void;
 
@@ -370,7 +371,7 @@ declare module react {
     inputs: ?$ReadOnlyArray<mixed>,
   ): void;
 
-  declare export default {|
+  declare export default {
     +DOM: typeof DOM,
     +PropTypes: typeof PropTypes,
     +version: typeof version,
@@ -401,7 +402,7 @@ declare module react {
     +useCallback: typeof useCallback,
     +useMemo: typeof useMemo,
     +useImperativeHandle: typeof useImperativeHandle,
-  |};
+  };
 }
 
 // TODO Delete this once https://github.com/facebook/react/pull/3031 lands
@@ -437,19 +438,19 @@ declare module React {
 //     ReactPropsChainableTypeChecker;
 
 type ReactPropTypes = {
-  array: React$PropType$Primitive<Array<any>>;
-  bool: React$PropType$Primitive<boolean>;
-  func: React$PropType$Primitive<Function>;
-  number: React$PropType$Primitive<number>;
-  object: React$PropType$Primitive<Object>;
-  string: React$PropType$Primitive<string>;
-  any: React$PropType$Primitive<any>;
-  arrayOf: React$PropType$ArrayOf;
-  element: React$PropType$Primitive<any>; /* TODO */
-  instanceOf: React$PropType$InstanceOf;
-  node: React$PropType$Primitive<any>; /* TODO */
-  objectOf: React$PropType$ObjectOf;
-  oneOf: React$PropType$OneOf;
-  oneOfType: React$PropType$OneOfType;
-  shape: React$PropType$Shape;
+  array: React$PropType$Primitive<$ReadOnlyArray<any>>,
+  bool: React$PropType$Primitive<boolean>,
+  func: React$PropType$Primitive<Function>,
+  number: React$PropType$Primitive<number>,
+  object: React$PropType$Primitive<Object>,
+  string: React$PropType$Primitive<string>,
+  any: React$PropType$Primitive<any>,
+  arrayOf: React$PropType$ArrayOf,
+  element: React$PropType$Primitive<any>, /* TODO */
+  instanceOf: React$PropType$InstanceOf,
+  node: React$PropType$Primitive<any>, /* TODO */
+  objectOf: React$PropType$ObjectOf,
+  oneOf: React$PropType$OneOf,
+  oneOfType: React$PropType$OneOfType,
+  shape: React$PropType$Shape,
 }

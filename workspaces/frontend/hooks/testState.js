@@ -1,11 +1,11 @@
 // @flow strict-local
 import * as effector from '@stateless-app/frontend/helpers/effector'
 
-type State = {|
+type State = {
   +fullscreen: boolean,
   +fullscreenUIHidden: boolean,
   +fullscreenUIOnHold: boolean,
-|}
+}
 
 const store = effector.createStore<State>({
   fullscreen: false,

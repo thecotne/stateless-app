@@ -7,12 +7,13 @@
     "producers-cli": "./bin/run"
   },
   "dependencies": {
+    "@babel/register": "^7.11.5",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/dev-cli": "^1",
     "@oclif/plugin-help": "^3.2.0",
     "chalk": "^4.1.0",
-    "chokidar": "^3.4.2"
+    "chokidar": "^3.4.3"
   },
   "main": "index.js",
   "oclif": {

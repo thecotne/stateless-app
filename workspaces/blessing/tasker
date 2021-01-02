@@ -13,7 +13,7 @@ ESLINT_FILES="$ROOT_DIR/flow-typed $WORKSPACES_DIR"
 ESLINT_COMMAND="eslint --ignore-path $ESLINT_IGNORE_CONFIG --config $ESLINT_CONFIG $ESLINT_FILES"
 
 PRETTIER_CONFIG="$SELF_DIR/.prettierrc.js"
-PRETTIER_CSS_FILES="$WORKSPACE_DIR/sass/**/**.scss $WORKSPACE_DIR/sass/*.scss"
+PRETTIER_CSS_FILES="$WORKSPACE_DIR/sass/*/*/*.scss $WORKSPACE_DIR/sass/*/*.scss $WORKSPACE_DIR/sass/*.scss"
 PRETTIER_CSS_COMMAND="prettier --config $PRETTIER_CONFIG $PRETTIER_CSS_FILES --parser=css"
 
 WEBPACK_CONFIG="$SELF_DIR/webpack.config.js"
@@ -28,9 +28,9 @@ source $ROOT_DIR/node_modules/@thecotne/tasker/tasker-core
 
 function start { # Start Development Server
   if [[ "$1" = "--production" ]]; then
-    webpack-dev-server --config $WEBPACK_CONFIG --mode=production --env.https
+    webpack serve --config $WEBPACK_CONFIG --mode=production
   else
-    webpack-dev-server --config $WEBPACK_CONFIG --mode=development --env.https
+    webpack serve --config $WEBPACK_CONFIG --mode=development
   fi
 }
 
@@ -62,8 +62,17 @@ function clean { # Remove built files
 
 function test { # Run Tests
   prettier-css-lint
+  grep-tests
   lint
   flow-check
+}
+
+function grep-tests { # custom linting using grep
+  TEST_DIR=$(_path_relative $ROOT_DIR $WORKSPACE_DIR)
+
+  _grep -HRin "facebook\.com" $TEST_DIR || true
+  _grep -HRin "google\.\(com\|ge\)" $TEST_DIR || true
+  _grep -HRin "girchi\.\(com\|ge\)" $TEST_DIR || true
 }
 
 function prettier-css { # Prettier CSS

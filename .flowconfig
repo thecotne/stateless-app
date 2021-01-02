@@ -27,7 +27,7 @@ module.name_mapper.extension='scss' -> 'empty/object'
 
 esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
-esproposal.decorators=warn
+; esproposal.decorators=warn
 esproposal.export_star_as=enable
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
@@ -56,7 +56,7 @@ unnecessary-invariant
 signature-verification-failure
 implicit-inexact-object
 uninitialized-instance-property
-ambiguous-object-type
+; ambiguous-object-type
 
 [version]
-0.134.0
+0.136.0

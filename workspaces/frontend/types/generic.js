@@ -1,5 +1,4 @@
 // @flow strict-local
-
 //
 export type UUIDString = string
 export type URLString = string
