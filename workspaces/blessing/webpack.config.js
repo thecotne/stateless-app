@@ -183,6 +183,7 @@ module.exports = (env = {}, argv = {}) => {
           if (/[/]\w+[.]d[.]ts$/.test(path)) return false
           if (/[/]\w+_producer[.]ts$/.test(path)) return false
           if (path === frontendAbs('tsconfig.json')) return false
+          if (path === frontendAbs('tsconfig.tsbuildinfo')) return false
           if (path === frontendAbs('package.json')) return false
 
           return true
