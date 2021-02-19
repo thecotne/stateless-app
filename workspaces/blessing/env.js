@@ -10,7 +10,7 @@ const yamlLoad = (path, optional) => {
   if (optional && !fs.existsSync(path)) {
     return {}
   } else {
-    return yaml.safeLoad(fs.readFileSync(path, 'utf8'))
+    return yaml.load(fs.readFileSync(path, 'utf8'))
   }
 }
 

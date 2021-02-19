@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+SELF_PATH=$(cd -P -- "$(dirname -- "$0")" && pwd -P) && SELF_PATH=$SELF_PATH/$(basename -- "$0")
+SELF_DIR=$(dirname $SELF_PATH)
+
+RSYNC_COMMAND="rsync -vaz --exclude node_modules --exclude tsconfig.tsbuildinfo"
+
+eval "$RSYNC_COMMAND $SELF_DIR/workspaces/blessing/ ./workspaces/blessing/"
+eval "$RSYNC_COMMAND $SELF_DIR/workspaces/producers/ ./workspaces/producers/"
+eval "$RSYNC_COMMAND $SELF_DIR/.editorconfig ./.editorconfig"
+eval "$RSYNC_COMMAND $SELF_DIR/.eslintrc.js ./.eslintrc.js"
+eval "$RSYNC_COMMAND $SELF_DIR/.nvmrc ./.nvmrc"
+eval "$RSYNC_COMMAND $SELF_DIR/.prettierrc.js ./.prettierrc.js"
+eval "$RSYNC_COMMAND $SELF_DIR/.yarnrc ./.yarnrc"
+eval "$RSYNC_COMMAND $SELF_DIR/README.md ./README.md"
+eval "$RSYNC_COMMAND $SELF_DIR/tasker ./tasker"
